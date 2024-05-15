@@ -1,16 +1,15 @@
 package com.combs.cards.mongo.cards.models;
 
-import java.math.BigDecimal;
-import java.util.UUID;
-
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import java.math.BigDecimal;
 
 @Document
 public class Card {
 
     @Id
-    private UUID id;
+    private String _id;
     private String sport;
     private String year;
     private String manufacturer;
@@ -18,8 +17,8 @@ public class Card {
     private String lastName;
     private BigDecimal psaValue;
 
-    public Card(UUID id, String sport, String year, String manufacturer, String firstName, String lastName, BigDecimal psaValue) {
-        this.id = id;
+    public Card(String _id, String sport, String year, String manufacturer, String firstName, String lastName, BigDecimal psaValue) {
+        this._id = _id;
         this.sport = sport;
         this.year = year;
         this.manufacturer = manufacturer;
@@ -32,12 +31,12 @@ public class Card {
 
     }
 
-    public UUID getId() {
-        return id;
+    public String get_id() {
+        return _id;
     }
 
-    public void setId(UUID id) {
-        this.id = id;
+    public void set_id(String _id) {
+        this._id = _id;
     }
 
     public String getSport() {

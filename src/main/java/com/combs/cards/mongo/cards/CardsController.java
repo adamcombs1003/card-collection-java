@@ -2,13 +2,12 @@ package com.combs.cards.mongo.cards;
 
 import com.combs.cards.mongo.cards.models.AddCardRequest;
 import com.combs.cards.mongo.cards.models.Card;
-import com.combs.cards.mongo.cards.models.CardListResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:4200")
@@ -21,21 +20,29 @@ public class CardsController {
     }
 
     @GetMapping("/cards")
-    public ResponseEntity<CardListResponse> getCards() {
-        CardListResponse cards;
+    public ResponseEntity<List<Card>> getCards() {
+        List<Card> cards;
         try {
-            cards = new CardListResponse(cardsRepository.findAll());
+            cards = cardsRepository.findAll();
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return new ResponseEntity<>(cards, HttpStatus.OK);
+    }
+
+    @GetMapping("/cards/{id}")
+    public ResponseEntity<Card> getCard(@PathVariable String id) {
+        Optional<Card> card = cardsRepository.findById(id);
+        if (card.isPresent()) {
+            return new ResponseEntity<>(card.get(), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
     }
     
     @PostMapping("/cards/add")
     public ResponseEntity<HttpStatus> addCard(@RequestBody AddCardRequest addCardRequest) {
         try {
             Card card = new Card();
-            card.setId(UUID.randomUUID());
             card.setFirstName(addCardRequest.getFirstName());
             card.setLastName(addCardRequest.getLastName());
             card.setYear(addCardRequest.getYear());
@@ -49,12 +56,12 @@ public class CardsController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @DeleteMapping("/cards/remove")
-    public ResponseEntity<HttpStatus> deleteCard(@RequestParam UUID id) {
+    @DeleteMapping("/cards/delete/{id}")
+    public ResponseEntity<HttpStatus> deleteCard(@PathVariable("id") String id) {
         try {
             Optional<Card> card = cardsRepository.findById(id);
             if (card.isPresent()){
-                cardsRepository.deleteById(id);
+                cardsRepository.deleteById(card.get().get_id());
             } else {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
