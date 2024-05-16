@@ -1,13 +1,11 @@
 package com.combs.cards.mongo.cards;
 
-import com.combs.cards.mongo.cards.models.AddCardRequest;
 import com.combs.cards.mongo.cards.models.Card;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:4200")
@@ -32,15 +30,14 @@ public class CardsController {
 
     @GetMapping("/cards/{id}")
     public ResponseEntity<Card> getCard(@PathVariable String id) {
-        Optional<Card> card = cardsRepository.findById(id);
-        if (card.isPresent()) {
-            return new ResponseEntity<>(card.get(), HttpStatus.OK);
+        if (cardsRepository.findById(id).isPresent()) {
+            return new ResponseEntity<>(cardsRepository.findById(id).get(), HttpStatus.OK);
         }
         return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
     }
     
     @PostMapping("/cards/add")
-    public ResponseEntity<HttpStatus> addCard(@RequestBody AddCardRequest addCardRequest) {
+    public ResponseEntity<HttpStatus> addCard(@RequestBody Card addCardRequest) {
         try {
             Card card = new Card();
             card.setFirstName(addCardRequest.getFirstName());
@@ -57,11 +54,10 @@ public class CardsController {
     }
 
     @DeleteMapping("/cards/delete/{id}")
-    public ResponseEntity<HttpStatus> deleteCard(@PathVariable("id") String id) {
+    public ResponseEntity<HttpStatus> deleteCard(@PathVariable String id) {
         try {
-            Optional<Card> card = cardsRepository.findById(id);
-            if (card.isPresent()){
-                cardsRepository.deleteById(card.get().get_id());
+            if (cardsRepository.findById(id).isPresent()){
+                cardsRepository.deleteById(cardsRepository.findById(id).get().get_id());
             } else {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
@@ -72,9 +68,13 @@ public class CardsController {
     }
 
     @PutMapping("/cards/update")
-    public ResponseEntity<HttpStatus> putCard(@RequestBody Card card) {
+    public ResponseEntity<HttpStatus> putCard(@RequestBody Card updateCardRequest) {
         try {
-            cardsRepository.save(card);
+            if (cardsRepository.findById(updateCardRequest.get_id()).isPresent()){
+                cardsRepository.save(updateCardRequest);
+            } else {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
         } catch(Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
