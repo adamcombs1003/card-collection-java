@@ -39,14 +39,7 @@ public class CardsController {
     @PostMapping("/cards/add")
     public ResponseEntity<HttpStatus> addCard(@RequestBody Card addCardRequest) {
         try {
-            Card card = new Card();
-            card.setFirstName(addCardRequest.getFirstName());
-            card.setLastName(addCardRequest.getLastName());
-            card.setYear(addCardRequest.getYear());
-            card.setSport(addCardRequest.getSport());
-            card.setManufacturer(addCardRequest.getManufacturer());
-            card.setPsaValue(addCardRequest.getPsaValue());
-            cardsRepository.insert(card);
+            cardsRepository.insert(addCardRequest);
         } catch(Exception exception) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
