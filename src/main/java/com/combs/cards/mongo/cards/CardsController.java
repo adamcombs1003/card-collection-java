@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin(origins = "*")
 @RestController
-@CrossOrigin(origins = "http://localhost:4200")
 public class CardsController {
 
     private final CardsRepository cardsRepository;
@@ -35,7 +35,7 @@ public class CardsController {
         }
         return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
     }
-    
+
     @PostMapping("/cards/add")
     public ResponseEntity<HttpStatus> addCard(@RequestBody Card addCardRequest) {
         try {
