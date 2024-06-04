@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 public class CardsController {
 
@@ -50,7 +50,7 @@ public class CardsController {
     public ResponseEntity<HttpStatus> deleteCard(@PathVariable String id) {
         try {
             if (cardsRepository.findById(id).isPresent()){
-                cardsRepository.deleteById(cardsRepository.findById(id).get().get_id());
+                cardsRepository.deleteById(cardsRepository.findById(id).get()._id());
             } else {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
@@ -63,7 +63,7 @@ public class CardsController {
     @PutMapping("/cards/update")
     public ResponseEntity<HttpStatus> putCard(@RequestBody Card updateCardRequest) {
         try {
-            if (cardsRepository.findById(updateCardRequest.get_id()).isPresent()){
+            if (cardsRepository.findById(updateCardRequest._id()).isPresent()){
                 cardsRepository.save(updateCardRequest);
             } else {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
