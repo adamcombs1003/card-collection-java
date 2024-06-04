@@ -10,7 +10,7 @@ public record Card(@Id String _id,
                    String year,
                    String sport,
                    String manufacturer,
-                   String subset,
+                   String subSet,
                    String firstName,
                    String lastName,
                    BigDecimal psaValue) {}
