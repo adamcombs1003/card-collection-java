@@ -13,5 +13,6 @@ public record Card(@Id String _id,
                    String subSet,
                    String firstName,
                    String lastName,
+                   String cardNumber,
                    BigDecimal psaValue) {}
 
