@@ -15,5 +15,6 @@ public record Card(@Id String _id,
                    String lastName,
                    String cardNumber,
                    Integer quantity,
-                   BigDecimal psaValue) {}
-
+                   BigDecimal psaValue,
+                   BigDecimal soldValue, 
+                   BigDecimal psaGradeFees) {}
